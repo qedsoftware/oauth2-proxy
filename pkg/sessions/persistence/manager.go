@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"time"
@@ -87,4 +88,25 @@ func (m *Manager) Clear(rw http.ResponseWriter, req *http.Request) error {
 	return tckt.clearSession(func(key string) error {
 		return m.Store.Clear(req.Context(), key)
 	})
+}
+
+func (m *Manager) Healthcheck(req *http.Request) error {
+	k := "test"
+	v := []byte("test")
+	err := m.Store.Save(req.Context(), k, v, time.Second)
+	if err != nil {
+		return fmt.Errorf("error saving to store: %w", err)
+	}
+	v2, err := m.Store.Load(req.Context(), k)
+	if err != nil {
+		return fmt.Errorf("error loading from store: %w", err)
+	}
+	if !bytes.Equal(v, v2) {
+		return fmt.Errorf("values don't match: %v != %v", v, v2)
+	}
+	err = m.Store.Clear(req.Context(), k)
+	if err != nil {
+		return fmt.Errorf("error clearing store: %w", err)
+	}
+	return nil
 }

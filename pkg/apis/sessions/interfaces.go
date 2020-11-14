@@ -9,4 +9,5 @@ type SessionStore interface {
 	Save(rw http.ResponseWriter, req *http.Request, s *SessionState) error
 	Load(req *http.Request) (*SessionState, error)
 	Clear(rw http.ResponseWriter, req *http.Request) error
+	Healthcheck(req *http.Request) error
 }

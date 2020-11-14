@@ -9,10 +9,10 @@ import (
 	// load the driver
 	_ "github.com/lib/pq"
 
-	"github.com/oauth2-proxy/oauth2-proxy/pkg/apis/options"
-	"github.com/oauth2-proxy/oauth2-proxy/pkg/apis/sessions"
+	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/apis/options"
+	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/apis/sessions"
 
-	"github.com/oauth2-proxy/oauth2-proxy/pkg/sessions/persistence"
+	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/sessions/persistence"
 )
 
 // SessionStore is an implementation of the persistence.Store

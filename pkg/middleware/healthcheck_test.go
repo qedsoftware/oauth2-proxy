@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
+	"github.com/oauth2-proxy/oauth2-proxy/v7/pkg/sessions/persistence"
+	sessiontests "github.com/oauth2-proxy/oauth2-proxy/v7/pkg/sessions/tests"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
@@ -27,8 +29,9 @@ var _ = Describe("HealthCheck suite", func() {
 			}
 
 			rw := httptest.NewRecorder()
-
-			handler := NewHealthCheck(in.healthCheckPaths, in.healthCheckUserAgents)(http.NotFoundHandler())
+			store := sessiontests.NewMockStore()
+			mgr := persistence.NewManager(store, nil)
+			handler := NewHealthCheck(in.healthCheckPaths, in.healthCheckUserAgents, mgr)(http.NotFoundHandler())
 			handler.ServeHTTP(rw, req)
 
 			Expect(rw.Code).To(Equal(in.expectedStatus))

@@ -498,9 +498,10 @@ var _ = Describe("Stored Session Suite", func() {
 })
 
 type fakeSessionStore struct {
-	SaveFunc  func(http.ResponseWriter, *http.Request, *sessionsapi.SessionState) error
-	LoadFunc  func(req *http.Request) (*sessionsapi.SessionState, error)
-	ClearFunc func(rw http.ResponseWriter, req *http.Request) error
+	SaveFunc   func(http.ResponseWriter, *http.Request, *sessionsapi.SessionState) error
+	LoadFunc   func(req *http.Request) (*sessionsapi.SessionState, error)
+	ClearFunc  func(rw http.ResponseWriter, req *http.Request) error
+	HealthFunc func(req *http.Request) error
 }
 
 func (f *fakeSessionStore) Save(rw http.ResponseWriter, req *http.Request, s *sessionsapi.SessionState) error {
@@ -519,6 +520,12 @@ func (f *fakeSessionStore) Load(req *http.Request) (*sessionsapi.SessionState, e
 func (f *fakeSessionStore) Clear(rw http.ResponseWriter, req *http.Request) error {
 	if f.ClearFunc != nil {
 		return f.ClearFunc(rw, req)
+	}
+	return nil
+}
+func (f *fakeSessionStore) Healthcheck(req *http.Request) error {
+	if f.HealthFunc != nil {
+		return f.HealthFunc(req)
 	}
 	return nil
 }

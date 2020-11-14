@@ -83,6 +83,10 @@ func (s *SessionStore) Clear(rw http.ResponseWriter, req *http.Request) error {
 	return nil
 }
 
+func (s *SessionStore) Healthcheck(req *http.Request) error {
+	return nil
+}
+
 // cookieForSession serializes a session state for storage in a cookie
 func (s *SessionStore) cookieForSession(ss *sessions.SessionState) ([]byte, error) {
 	if s.Minimal && (ss.AccessToken != "" || ss.IDToken != "" || ss.RefreshToken != "") {
